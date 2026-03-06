@@ -6,11 +6,11 @@ from tensorflow.keras.models import load_model
 from skimage.transform import resize
 
 # === PATHS ===
-TEST_IMG_DIR = r"C:\Users\91954\Downloads\HFH\Test"
-MODEL_PATH   = r"C:\Users\91954\epilepsy_MRI\hippo_unet_all.h5"
+TEST_IMG_DIR = r"dataset/Test"
+MODEL_PATH   = r"best_hippo_unet.h5"
 
 # === LOAD MODEL ===
-model = load_model(MODEL_PATH)
+model = load_model(MODEL_PATH, compile=False)
 
 IMG_HEIGHT = 256
 IMG_WIDTH  = 256

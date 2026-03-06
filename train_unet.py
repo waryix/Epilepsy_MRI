@@ -6,11 +6,18 @@ import tensorflow as tf
 from unet_model import unet
 import albumentations as A
 
+import tensorflow as tf
+
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+
 # ===============================
 # Paths to MRI and Labels
 # ===============================
-TRAIN_IMG_DIR = r"C:\Users\91954\Downloads\HFH\Train"
-TRAIN_LBL_DIR = r"C:\Users\91954\Downloads\HFH\Train\Labels"
+TRAIN_IMG_DIR = r"dataset/Train"
+TRAIN_LBL_DIR = r"dataset/Train/Labels"
 
 # ===============================
 # Normalize each volume
@@ -22,7 +29,7 @@ def normalize(vol):
 # Data Generator
 # ===============================
 class MRIDataGenerator(tf.keras.utils.Sequence):
-    def __init__(self, img_files, lbl_dir, batch_size=4, augment=None, shuffle=True):
+    def __init__(self, img_files, lbl_dir, batch_size=8, augment=None, shuffle=True):
         self.img_files = img_files
         self.lbl_dir = lbl_dir
         self.batch_size = batch_size
@@ -100,8 +107,8 @@ val_files   = all_images[split_idx:]
 # ===============================
 # Create Generators
 # ===============================
-train_gen = MRIDataGenerator(train_files, TRAIN_LBL_DIR, batch_size=4, augment=augmentations)
-val_gen   = MRIDataGenerator(val_files, TRAIN_LBL_DIR, batch_size=4, augment=None, shuffle=False)
+train_gen = MRIDataGenerator(train_files, TRAIN_LBL_DIR, batch_size=8, augment=augmentations)
+val_gen   = MRIDataGenerator(val_files, TRAIN_LBL_DIR, batch_size=8, augment=None, shuffle=False)
 
 # ===============================
 # Load U-Net model
